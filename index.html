@@ -16,13 +16,13 @@ main{width:min(100%,620px);margin:auto;background:#f8efe8;box-shadow:0 0 30px #0
 </style>
 </head>
 <body>
-<div id="intro" aria-label="Mở thiệp cưới">
-  <div class="stage" id="stage" role="button" tabindex="0" aria-label="Nhấn để mở thiệp">
-    <img src="page-01.png" class="active" alt="Phong bì thiệp cưới">
-    <img src="page-02.png" alt="Phong bì">
-    <img src="page-03.png" alt="Phong bì mở">
-    <img src="page-04.png" alt="Ảnh cưới xuất hiện">
-    <img src="page-05.png" alt="Ảnh cưới">
+<div id="intro">
+  <div class="stage" id="stage">
+    <img src="page-01.png" class="active">
+    <img src="page-02.png">
+    <img src="page-03.png">
+    <img src="page-04.png">
+    <img src="page-05.png">
     <div class="hint" id="hint">Chạm để mở thiệp ♡</div>
   </div>
 </div>
@@ -37,12 +37,44 @@ main{width:min(100%,620px);margin:auto;background:#f8efe8;box-shadow:0 0 30px #0
 </main>
 <div class="toast" id="toast"></div>
 <script>
-const intro=document.getElementById('intro'),stage=document.getElementById('stage'),frames=[...stage.querySelectorAll('img')],hint=document.getElementById('hint');let i=0,busy=false;
-function next(){if(busy)return;busy=true;if(i<frames.length-1){frames[i].classList.remove('active');i++;frames[i].classList.add('active');hint.textContent=i<frames.length-1?'Chạm để tiếp tục ♡':'Chạm để xem thiệp ♡';setTimeout(()=>busy=false,430)}else{intro.classList.add('done');document.body.style.overflow='';setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),100)}}
-stage.addEventListener('click',next);stage.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();next()}});document.body.style.overflow='hidden';
-function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2400)}
-document.getElementById('calendarBtn').addEventListener('click',e=>{e.preventDefault();const ics=`BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:20260912T020000Z\r\nSUMMARY:Tiệc cưới Ngọc Vũ & Thanh Huệ\r\nLOCATION:Nhà Văn Hóa Thôn An Chiếu 1, Phố Hiến, Hưng Yên\r\nEND:VEVENT\r\nEND:VCALENDAR`;const b=new Blob([ics],{type:'text/calendar'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dam-cuoi-ngoc-vu-thanh-hue.ics';a.click();URL.revokeObjectURL(a.href);toast('Đã tạo lịch cưới')});
-document.getElementById('rsvpBtn').addEventListener('click',()=>toast('Kéo xuống Sổ lưu bút để phản hồi'));
-document.getElementById('guestBtn').addEventListener('click',e=>{e.preventDefault();toast('Phần gửi lời chúc cần nối với biểu mẫu/Google Sheet')});
+const intro = document.getElementById('intro');
+const stage = document.getElementById('stage');
+const frames = Array.from(stage.querySelectorAll('img'));
+const hint = document.getElementById('hint');
+
+let running = false;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function playIntro() {
+  if (running) return;
+  running = true;
+
+  hint.style.display = 'none';
+
+  for (let i = 1; i < frames.length; i++) {
+    frames.forEach((img, index) => {
+      img.classList.toggle('active', index === i);
+    });
+
+    await sleep(700);
+  }
+
+  await sleep(800);
+
+  intro.classList.add('done');
+  running = false;
+}
+
+stage.addEventListener('click', playIntro);
+
+stage.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    playIntro();
+  }
+});
 </script>
 </body></html>
