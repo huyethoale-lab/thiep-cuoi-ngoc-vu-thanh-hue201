@@ -41,6 +41,65 @@ main{width:min(100%,620px);margin:auto;background:#f8efe8;box-shadow:0 0 30px #0
   cursor:pointer;
   touch-action:manipulation;
 }
+  #guestbook{
+  position:relative;
+}
+
+.guest-form{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  pointer-events:none;
+}
+
+.guest-form input,
+.guest-form textarea,
+.guest-form button{
+  position:absolute;
+  pointer-events:auto;
+  font-family:Georgia,"Times New Roman",serif;
+}
+
+/* Ô nhập tên */
+#guestName{
+  left:30%;
+  top:31%;
+  width:40%;
+  height:8%;
+  border:0;
+  background:transparent;
+  padding:0 12px;
+  font-size:16px;
+  color:#5b0b0f;
+  outline:none;
+}
+
+/* Ô nhập lời chúc */
+#guestWish{
+  left:30%;
+  top:41%;
+  width:40%;
+  height:9%;
+  border:0;
+  background:transparent;
+  padding:10px 12px;
+  resize:none;
+  font-size:16px;
+  color:#5b0b0f;
+  outline:none;
+}
+
+/* Nút gửi lời chúc */
+.guest-form button{
+  left:43%;
+  top:51%;
+  width:30%;
+  height:7%;
+  border:0;
+  background:transparent;
+  color:transparent;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -87,7 +146,26 @@ main{width:min(100%,620px);margin:auto;background:#f8efe8;box-shadow:0 0 30px #0
     aria-label="Mở Google Maps">
   </a>
 </section>
-  <section class="page" id="guestbook"><img src="page-12.png" alt="Sổ lưu bút"><a class="hotspot guest" id="guestBtn" href="#" aria-label="Gửi lời chúc"></a></section>
+ <section class="page" id="guestbook">
+  <img src="page-12.png" alt="Sổ lưu bút">
+
+  <form id="guestForm" class="guest-form">
+    <input
+      id="guestName"
+      type="text"
+      placeholder="Nhập tên"
+      required
+    >
+
+    <textarea
+      id="guestWish"
+      placeholder="Nhập lời chúc"
+      required
+    ></textarea>
+
+    <button type="submit">GỬI LỜI CHÚC</button>
+  </form>
+</section>
 </main>
 <div class="toast" id="toast"></div>
 <script>
